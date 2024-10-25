@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "start": "deno run -A src/index.ts",
+    "test": "deno test --allow-read --allow-write src/utils.test.ts"
+  }
+}
