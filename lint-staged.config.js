@@ -1,4 +1,4 @@
 export default {
   "*.ts": "deno lint --fix",
-  "*": "deno fmt",
+  "*.{ts,json,md}": "deno fmt",
 };
