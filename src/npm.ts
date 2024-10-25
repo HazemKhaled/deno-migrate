@@ -1,11 +1,15 @@
 import { join } from "jsr:@std/path";
 import type { DenoConfigType } from "./types.ts";
 
-export async function migrateNpmScripts(
-  existingDenoConfig: DenoConfigType,
-) {
+export async function migrateNpmScripts({
+  workingDirectory,
+  existingDenoConfig,
+}: {
+  workingDirectory: string;
+  existingDenoConfig: DenoConfigType;
+}) {
   try {
-    const packageJsonPath = join(Deno.cwd(), "package.json");
+    const packageJsonPath = join(workingDirectory, "package.json");
     const pkgJson = JSON.parse(await Deno.readTextFile(packageJsonPath));
 
     return {

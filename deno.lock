@@ -12,6 +12,7 @@
     "jsr:@std/encoding@~1.0.5": "1.0.5",
     "jsr:@std/fmt@~1.0.2": "1.0.3",
     "jsr:@std/io@~0.224.9": "0.224.9",
+    "jsr:@std/path@*": "1.0.6",
     "jsr:@std/path@~1.0.6": "1.0.6",
     "jsr:@std/text@~1.0.7": "1.0.8",
     "npm:lint-staged@*": "15.2.10"
@@ -56,7 +57,7 @@
         "jsr:@std/assert",
         "jsr:@std/fmt",
         "jsr:@std/io",
-        "jsr:@std/path",
+        "jsr:@std/path@~1.0.6",
         "jsr:@std/text"
       ]
     },
