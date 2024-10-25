@@ -1,8 +1,7 @@
-import { Command } from "https://deno.land/x/cliffy@v0.25.7/command/mod.ts";
-import { Checkbox } from "https://deno.land/x/cliffy@v0.25.7/prompt/mod.ts";
+import { Command } from "jsr:@cliffy/command@1.0.0-rc.7";
+import { Checkbox } from "jsr:@cliffy/prompt@1.0.0-rc.7";
 import { migrateNpmScripts } from "./npm.ts";
-import { writeDenoConfig } from "./utils.ts";
-import existingDenoConfig from "../deno.json" with { type: "json" };
+import { readDenoConfig, writeDenoConfig } from "./utils.ts";
 import type { DenoConfigType } from "./types.ts";
 
 const cli = new Command()
@@ -21,6 +20,7 @@ const cli = new Command()
       ],
     });
 
+    const existingDenoConfig = await readDenoConfig();
     let updatedDenoJson: DenoConfigType = { ...existingDenoConfig };
 
     if (options.includes("scripts")) {
