@@ -14,6 +14,7 @@ need for external ones such as **npm**, **Prettier**, and **ESLint**.
 - **Interactive Migration Options:** Select the parts of your project you want
   to migrate using a checklist.
 - **Current Status:**
+  - [ ] Automatically detect configurations to migrate
   - [x] **Migrate package.json scripts to deno.json tasks**
   - [ ] **Migrate package.json dependencies to JSR imports** (Coming Soon)
   - [ ] **Migrate Prettier configuration to deno.json** (Coming Soon)
@@ -30,6 +31,12 @@ Run the following command to start the interactive migration process:
 
 ```bash
 deno run -A https://deno.land/x/deno_migrate@latest
+```
+
+Pass workingDirectory to check for a sub directory
+
+```bash
+deno run -A https://deno.land/x/deno_migrate@latest --workingDirectory = ~/projects/project-x
 ```
 
 You will see:

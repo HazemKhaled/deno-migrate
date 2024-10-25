@@ -1,15 +1,22 @@
-import { Command } from "https://deno.land/x/cliffy@v0.25.7/command/mod.ts";
-import { Checkbox } from "https://deno.land/x/cliffy@v0.25.7/prompt/mod.ts";
+import { Command } from "jsr:@cliffy/command@1.0.0-rc.7";
+import { Checkbox } from "jsr:@cliffy/prompt@1.0.0-rc.7";
 import { migrateNpmScripts } from "./npm.ts";
-import { writeDenoConfig } from "./utils.ts";
-import existingDenoConfig from "../deno.json" with { type: "json" };
+import { readDenoConfig, writeDenoConfig } from "./utils.ts";
 import type { DenoConfigType } from "./types.ts";
 
 const cli = new Command()
   .name("deno-migrator")
   .version("1.0.0")
   .description("A CLI to migrate Node.js projects to Deno")
-  .action(async () => {
+  .option(
+    "-d, --workingDirectory <directory:string>",
+    "Set the working directory",
+    {
+      default: Deno.cwd(),
+    },
+  )
+  .action(async ({ workingDirectory }) => {
+    console.log("🚧 Welcome to Deno Migrator CLI 🚧", workingDirectory);
     const options = await Checkbox.prompt({
       message: "Select the migrations you want to perform:",
       options: [
@@ -21,10 +28,16 @@ const cli = new Command()
       ],
     });
 
+    // Get the deno.json file and update it with the new scripts
+    const existingDenoConfig = await readDenoConfig({ workingDirectory });
     let updatedDenoJson: DenoConfigType = { ...existingDenoConfig };
 
+    // Migrate the npm scripts to deno tasks
     if (options.includes("scripts")) {
-      updatedDenoJson = await migrateNpmScripts(existingDenoConfig);
+      updatedDenoJson = await migrateNpmScripts({
+        workingDirectory,
+        existingDenoConfig,
+      });
     }
     if (options.includes("prettier")) {
       console.log("🚧 Prettier migration not implemented yet.");
@@ -43,7 +56,7 @@ const cli = new Command()
       // TODO: Implement dependencies migration logic here
     }
 
-    writeDenoConfig(updatedDenoJson);
+    writeDenoConfig({ workingDirectory, updatedDenoJson });
     console.log("✅ Scripts migration completed and saved to deno.json");
   });
 

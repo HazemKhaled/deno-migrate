@@ -3,5 +3,9 @@
     "start": "deno run -A src/index.ts",
     "test": "deno test --allow-read --allow-write src/utils.test.ts",
     "hook": "deno run --allow-read --allow-run --allow-write https://deno.land/x/deno_hooks@0.1.1/mod.ts"
+  },
+  "imports": {
+    "@cliffy/command": "jsr:@cliffy/command@1.0.0-rc.7",
+    "@cliffy/prompt": "jsr:@cliffy/prompt@1.0.0-rc.7"
   }
 }
