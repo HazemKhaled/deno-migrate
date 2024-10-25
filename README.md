@@ -15,10 +15,10 @@ need for external ones such as **npm**, **Prettier**, and **ESLint**.
   to migrate using a checklist.
 - **Current Status:**
   - [x] **Migrate package.json scripts to deno.json tasks**
-  - [] **Migrate package.json dependencies to JSR imports** (Coming Soon)
-  - [] **Migrate Prettier configuration to deno.json** (Coming Soon)
-  - [] **Migrate ESLint configuration to Deno lint rules** (Coming Soon)
-  - [] **Migrate tsconfig.json to deno.json** (Coming Soon)
+  - [ ] **Migrate package.json dependencies to JSR imports** (Coming Soon)
+  - [ ] **Migrate Prettier configuration to deno.json** (Coming Soon)
+  - [ ] **Migrate ESLint configuration to Deno lint rules** (Coming Soon)
+  - [ ] **Migrate tsconfig.json to deno.json** (Coming Soon)
 
 ---
 
