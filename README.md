@@ -1,14 +1,20 @@
 # Deno Migrate
 
-### 🚀 Simplify Your Node.js Project Migration to Deno  
-This CLI helps developers migrate their **Node.js projects** to **Deno** by converting configurations like `package.json` scripts, dependencies, Prettier, ESLint, and more. It takes advantage of **Deno’s native tools** to eliminate the need for external ones such as **npm**, **Prettier**, and **ESLint**.
+### 🚀 Simplify Your Node.js Project Migration to Deno
+
+This CLI helps developers migrate their **Node.js projects** to **Deno** by
+converting configurations like `package.json` scripts, dependencies, Prettier,
+ESLint, and more. It takes advantage of **Deno’s native tools** to eliminate the
+need for external ones such as **npm**, **Prettier**, and **ESLint**.
 
 ---
 
-## 📋 Features  
-- **Interactive Migration Options:** Select the parts of your project you want to migrate using a checklist.
+## 📋 Features
+
+- **Interactive Migration Options:** Select the parts of your project you want
+  to migrate using a checklist.
 - **Current Status:**
-  - [X] **Migrate package.json scripts to deno.json tasks**
+  - [x] **Migrate package.json scripts to deno.json tasks**
   - [] **Migrate package.json dependencies to JSR imports** (Coming Soon)
   - [] **Migrate Prettier configuration to deno.json** (Coming Soon)
   - [] **Migrate ESLint configuration to Deno lint rules** (Coming Soon)
@@ -16,7 +22,7 @@ This CLI helps developers migrate their **Node.js projects** to **Deno** by conv
 
 ---
 
-## 📖 Usage  
+## 📖 Usage
 
 ### **Interactive Mode**
 
@@ -27,6 +33,7 @@ deno run -A https://deno.land/x/deno_migrate@latest
 ```
 
 You will see:
+
 ```
 Select the migrations you want to perform:
 [ ] package.json scripts
@@ -36,7 +43,8 @@ Select the migrations you want to perform:
 [ ] tsconfig config
 ```
 
-Use the **arrow keys** and **spacebar** to select options, then press **Enter**. The CLI will run only the selected migrations and display the results.
+Use the **arrow keys** and **spacebar** to select options, then press **Enter**.
+The CLI will run only the selected migrations and display the results.
 
 ---
 
@@ -53,7 +61,8 @@ my-node-project/
 └── index.js
 ```
 
-After running the CLI, your **deno.json** will contain the necessary tasks and configurations, making the project ready for Deno.
+After running the CLI, your **deno.json** will contain the necessary tasks and
+configurations, making the project ready for Deno.
 
 ---
 
@@ -93,11 +102,13 @@ Contributions are welcome! Please follow these steps:
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
+for details.
 
 ---
 
 ## ⭐ Acknowledgments
 
 - [Deno](https://deno.land/) for the powerful runtime.
-- [Cliffy](https://deno.land/x/cliffy) for the CLI framework and interactive prompts.
+- [Cliffy](https://deno.land/x/cliffy) for the CLI framework and interactive
+  prompts.
