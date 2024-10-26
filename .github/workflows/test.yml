@@ -26,7 +26,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Deno
-        # uses: denoland/setup-deno@v1
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
@@ -37,5 +36,5 @@ jobs:
       - name: Run linter
         run: deno lint
 
-      # - name: Run tests
-      #   run: deno test -A
+      - name: Run tests
+        run: deno test -A
