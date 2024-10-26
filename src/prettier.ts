@@ -50,7 +50,7 @@ export async function migratePrettierScripts({
   }
 }
 
-const handleTextFile = (
+export const handleTextFile = (
   fileData: string,
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {
@@ -65,7 +65,7 @@ const handleTextFile = (
   }, existingDenoConfig);
 };
 
-const handleJsonFile = (
+export const handleJsonFile = (
   fileData: string,
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {
