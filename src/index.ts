@@ -2,15 +2,17 @@ import { Command } from "jsr:@cliffy/command@1.0.0-rc.7";
 import { Checkbox } from "jsr:@cliffy/prompt@1.0.0-rc.7";
 import { join } from "jsr:@std/path@1.0.7";
 
-import { migrateNpmScripts } from "./npm.ts";
-
 import {
   getAvailableOptions,
   readDenoConfig,
   writeDenoConfig,
 } from "./utils.ts";
-import type { DenoConfigType } from "./types.ts";
+
+import { migrateNpmScripts } from "./npm.ts";
 import { migratePrettierScripts } from "./prettier.ts";
+import { migrateTsConfigScripts } from "./tsconfig.ts";
+
+import type { DenoConfigType } from "./types.ts";
 
 const cli = new Command()
   .name("deno-migrator")
@@ -63,8 +65,10 @@ const cli = new Command()
           });
           break;
         case "typescript":
-          console.warn("🚧 tsconfig migration not implemented yet.");
-          // TODO: Implement tsconfig migration logic here
+          updatedDenoJson = await migrateTsConfigScripts({
+            file: filePath,
+            existingDenoConfig: updatedDenoJson,
+          });
           break;
         case "eslint":
           console.warn("🚧 ESLint migration not implemented yet.");
