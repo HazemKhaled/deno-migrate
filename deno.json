@@ -1,4 +1,8 @@
 {
+  "name": "@hazemkhaled/deno-migrate",
+  "version": "0.1.1",
+  "exports": "./src/index.ts",
+  "license": "MIT",
   "tasks": {
     "start": "deno run -A src/index.ts",
     "test": "deno test --allow-read --allow-write src/utils.test.ts"

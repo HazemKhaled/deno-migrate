@@ -1,6 +1,7 @@
-import { basename } from "jsr:@std/path";
+import { basename } from "jsr:@std/path@1.0.7";
+import { deepMerge } from "jsr:@std/collections@1.0.9";
+
 import type { DenoConfigType, GlobalConfigType } from "./types.ts";
-import { deepMerge } from "jsr:@std/collections";
 
 const configMap: Record<string, string> = {
   useTabs: "useTabs",
@@ -49,7 +50,7 @@ export async function migratePrettierScripts({
   }
 }
 
-const handleTextFile = (
+export const handleTextFile = (
   fileData: string,
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {
@@ -64,7 +65,7 @@ const handleTextFile = (
   }, existingDenoConfig);
 };
 
-const handleJsonFile = (
+export const handleJsonFile = (
   fileData: string,
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {
