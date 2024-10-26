@@ -10,6 +10,18 @@ export type DenoConfigType = {
   imports?: {
     [key: string]: string;
   };
+  fmt?: {
+    options: {
+      useTabs: boolean;
+      lineWidth: number;
+      indentWidth: number;
+      semiColons: boolean;
+      singleQuote: boolean;
+      proseWrap: "preserve" | "always" | "never";
+      include?: string[];
+      exclude?: string[];
+    };
+  };
 };
 
 export type GlobalConfigType = Record<string, string | boolean | IntegerType>;
