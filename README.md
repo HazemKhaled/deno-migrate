@@ -16,10 +16,12 @@ need for external ones such as **npm**, **Prettier**, and **ESLint**.
 - **Current Status:**
   - [x] Automatically detect configurations to migrate
   - [x] **Migrate package.json scripts to deno.json tasks**
+  - [x] **Migrate tsconfig.json to deno.json**
+  - [x] **Migrate Prettier configuration to deno.json**
   - [ ] **Migrate package.json dependencies to JSR imports** (Coming Soon)
-  - [x] **Migrate Prettier configuration to deno.json** (Coming Soon)
   - [ ] **Migrate ESLint configuration to Deno lint rules** (Coming Soon)
-  - [ ] **Migrate tsconfig.json to deno.json** (Coming Soon)
+  - [ ] **List any unsupported configs left in package.json** (Coming Soon)
+  - [ ] **Cleanup config files if 100% migrated**
 
 ---
 
