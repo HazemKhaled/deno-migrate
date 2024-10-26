@@ -1,4 +1,7 @@
 import type { DenoConfigType } from "./types.ts";
+import { walk } from "jsr:@std/fs";
+import { join } from "jsr:@std/path";
+import { CONFIG_GROUPS } from "./configs-map.ts";
 
 export async function readDenoConfig({
   workingDirectory,
@@ -40,4 +43,47 @@ export async function writeDenoConfig({
       console.error("❌ Error writing to deno.json:", error);
     }
   }
+}
+
+export async function getConfigFiles(workingDirectory: string = Deno.cwd()) {
+  const configFiles: Record<string, Record<string, string>> = {};
+
+  // Initialize each tool group with an empty object
+  for (const tool of Object.keys(CONFIG_GROUPS)) {
+    configFiles[tool] = {};
+  }
+
+  // Walk the directory and match files to their corresponding tool
+  for await (const entry of walk(workingDirectory, { maxDepth: 1 })) {
+    const filename = entry.name;
+    const filepath = join(workingDirectory, filename);
+
+    for (const [tool, files] of Object.entries(CONFIG_GROUPS)) {
+      if (files.includes(filename)) {
+        configFiles[tool][filename] = filepath;
+      }
+    }
+  }
+
+  return configFiles;
+}
+
+export async function getAvailableOptions(
+  workingDirectory: string = Deno.cwd(),
+) {
+  const configFiles = await getConfigFiles(workingDirectory);
+  const availableOptions = [];
+
+  for (const [tool, files] of Object.entries(CONFIG_GROUPS)) {
+    for (const file of files) {
+      if (configFiles[tool]?.[file]) {
+        availableOptions.push({
+          name: `${tool}: ${file}`,
+          value: `${tool}_${file}`,
+        });
+      }
+    }
+  }
+
+  return availableOptions;
 }
