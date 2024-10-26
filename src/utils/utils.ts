@@ -1,7 +1,7 @@
 import { walk } from "jsr:@std/fs@1.0.5";
 import { join } from "jsr:@std/path@1.0.7";
 
-import type { DenoConfigType } from "./types.ts";
+import type { DenoConfigType } from "../types.ts";
 import { CONFIG_GROUPS } from "./configs-map.ts";
 
 export async function readDenoConfig({

@@ -1,5 +1,5 @@
 import { assert, assertEquals } from "jsr:@std/assert";
-import { handleJsonFile } from "../src/prettier.ts";
+import { handleJsonFile } from "#recipes/prettier.ts";
 
 Deno.test("handleJsonFile processes JSON correctly", () => {
   const prettierJsonMock = JSON.stringify({

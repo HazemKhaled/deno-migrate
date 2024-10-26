@@ -6,11 +6,9 @@ import {
   getAvailableOptions,
   readDenoConfig,
   writeDenoConfig,
-} from "./utils.ts";
+} from "./utils/utils.ts";
 
-import { migrateNpmScripts } from "./npm.ts";
-import { migratePrettierScripts } from "./prettier.ts";
-import { migrateTsConfigScripts } from "./tsconfig.ts";
+import * as recipes from "#recipes/index.ts";
 
 import type { DenoConfigType } from "./types.ts";
 
@@ -47,36 +45,21 @@ const cli = new Command()
     let updatedDenoJson: DenoConfigType = { ...existingDenoConfig };
 
     for (const option of selectedOptions) {
-      const [tool, file] = option.split("_");
+      const [tool, file] = option.split("_") as [keyof typeof recipes, string];
       const filePath = join(workingDirectory, file);
 
-      switch (tool) {
-        case "npm":
-          console.log(`Migrating npm scripts from ${file}...`);
-          updatedDenoJson = await migrateNpmScripts({
-            file: filePath,
-            existingDenoConfig: updatedDenoJson,
-          });
-          break;
-        case "prettier":
-          updatedDenoJson = await migratePrettierScripts({
-            file: filePath,
-            existingDenoConfig: updatedDenoJson,
-          });
-          break;
-        case "typescript":
-          updatedDenoJson = await migrateTsConfigScripts({
-            file: filePath,
-            existingDenoConfig: updatedDenoJson,
-          });
-          break;
-        case "eslint":
-          console.warn("🚧 ESLint migration not implemented yet.");
-          // TODO: Implement ESLint migration logic here
-          break;
-        default:
-          console.error(`Unknown option: ${option}`);
+      if (!Object.keys(recipes).includes(tool)) {
+        console.error(
+          `❌ Migration for ${tool} is not supported yet, PRs are welcome.`,
+        );
+        continue;
       }
+
+      console.log(`✅ Migrating ${tool} from ${file}...`);
+      updatedDenoJson = await recipes[tool].migrate({
+        file: filePath,
+        existingDenoConfig: updatedDenoJson,
+      });
     }
 
     writeDenoConfig({ workingDirectory, updatedDenoJson });
