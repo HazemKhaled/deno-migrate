@@ -20,7 +20,7 @@ export async function migrateTsConfigScripts({
         fmt: {
           options: {
             include,
-            exclude
+            exclude,
           },
         },
       }, existingDenoConfig);
