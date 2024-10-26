@@ -114,8 +114,8 @@ for details.
 
 ---
 
-## ⭐ Acknowledgments
+## ⭐ Contributors
 
-- [Deno](https://deno.land/) for the powerful runtime.
-- [Cliffy](https://deno.land/x/cliffy) for the CLI framework and interactive
-  prompts.
+<a href="https://github.com/HazemKhaled/deno-migrate/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=HazemKhaled/deno-migrate" />
+</a>
