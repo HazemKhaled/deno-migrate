@@ -1,6 +1,7 @@
-import { basename } from "jsr:@std/path";
+import { basename } from "jsr:@std/path@1.0.7";
+import { deepMerge } from "jsr:@std/collections@1.0.9";
+
 import type { DenoConfigType, GlobalConfigType } from "./types.ts";
-import { deepMerge } from "jsr:@std/collections";
 
 const configMap: Record<string, string> = {
   useTabs: "useTabs",
