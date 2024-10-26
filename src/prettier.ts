@@ -1,10 +1,14 @@
+import { basename } from "jsr:@std/path";
 import type { DenoConfigType, GlobalConfigType } from "./types.ts";
+import { deepMerge } from "@std/collections";
 
-// TODO:: need to add all supported types conversion 🚨
-// For more help: https://docs.deno.com/runtime/fundamentals/linting_and_formatting
 const configMap: Record<string, string> = {
+  useTabs: "useTabs",
+  printWidth: "lineWidth",
   tabWidth: "indentWidth",
   semi: "semiColons",
+  singleQuote: "singleQuote",
+  proseWrap: "proseWrap",
 };
 
 const mapRules = (options: GlobalConfigType): GlobalConfigType => {
@@ -13,13 +17,12 @@ const mapRules = (options: GlobalConfigType): GlobalConfigType => {
   for (const item in options) {
     if (Object.hasOwn(configMap, item)) {
       resOptions[configMap[item]] = options[item];
-    } else {
-      resOptions[item] = options[item];
     }
   }
 
   return resOptions;
 };
+
 export async function migratePrettierScripts({
   file,
   existingDenoConfig,
@@ -28,16 +31,13 @@ export async function migratePrettierScripts({
   existingDenoConfig: DenoConfigType;
 }) {
   try {
-    const configFile = JSON.parse(await Deno.readTextFile(file));
+    const fileData = await Deno.readTextFile(file);
 
-    return {
-      ...existingDenoConfig,
-      fmt: {
-        options: {
-          ...mapRules(configFile || {}),
-        },
-      },
-    } as unknown as DenoConfigType;
+    if (basename(file) === ".prettierignore") {
+      return handleTextFile(fileData, existingDenoConfig);
+    }
+
+    return handleJsonFile(fileData, existingDenoConfig);
   } catch (error) {
     if (error instanceof Error) {
       console.error("❌ Error migrating scripts:", error.message);
@@ -48,3 +48,33 @@ export async function migratePrettierScripts({
     return existingDenoConfig;
   }
 }
+
+const handleTextFile = (
+  fileData: string,
+  existingDenoConfig: DenoConfigType,
+): DenoConfigType => {
+  const paths = fileData.split("\n").filter((el) => el.length);
+
+  return deepMerge({
+    fmt: {
+      options: {
+        exclude: paths,
+      },
+    },
+  }, existingDenoConfig);
+};
+
+const handleJsonFile = (
+  fileData: string,
+  existingDenoConfig: DenoConfigType,
+): DenoConfigType => {
+  const configFile = JSON.parse(fileData);
+
+  return deepMerge({
+    fmt: {
+      options: {
+        ...mapRules(configFile || {}),
+      },
+    },
+  }, existingDenoConfig);
+};
