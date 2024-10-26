@@ -8,6 +8,7 @@ import {
 } from "./utils.ts";
 import type { DenoConfigType } from "./types.ts";
 import { migratePrettierScripts } from "./prettier.ts";
+import { join } from "jsr:@std/path";
 
 const cli = new Command()
   .name("deno-migrator")
@@ -43,19 +44,20 @@ const cli = new Command()
 
     for (const option of selectedOptions) {
       const [tool, file] = option.split("_");
+      const filePath = join(workingDirectory, file);
 
       switch (tool) {
         case "npm":
           console.log(`Migrating npm scripts from ${file}...`);
           updatedDenoJson = await migrateNpmScripts({
-            file: workingDirectory + file,
-            existingDenoConfig,
+            file: filePath,
+            existingDenoConfig: updatedDenoJson,
           });
           break;
         case "prettier":
           updatedDenoJson = await migratePrettierScripts({
-            workingDirectory,
-            existingDenoConfig,
+            file: filePath,
+            existingDenoConfig: updatedDenoJson,
           });
           break;
         case "typescript":

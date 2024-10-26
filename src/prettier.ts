@@ -1,4 +1,3 @@
-import { join } from "jsr:@std/path";
 import type { DenoConfigType, GlobalConfigType } from "./types.ts";
 
 // TODO:: need to add all supported types conversion 🚨
@@ -22,15 +21,14 @@ const mapRules = (options: GlobalConfigType): GlobalConfigType => {
   return resOptions;
 };
 export async function migratePrettierScripts({
-  workingDirectory,
+  file,
   existingDenoConfig,
 }: {
-  workingDirectory: string;
+  file: string;
   existingDenoConfig: DenoConfigType;
 }) {
   try {
-    const configFilePath = join(workingDirectory, ".prettierrc");
-    const configFile = JSON.parse(await Deno.readTextFile(configFilePath));
+    const configFile = JSON.parse(await Deno.readTextFile(file));
 
     return {
       ...existingDenoConfig,
