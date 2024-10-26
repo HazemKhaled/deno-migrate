@@ -10,8 +10,9 @@ export async function readDenoConfig({
 }): Promise<DenoConfigType> {
   try {
     const denoJsonContent = await Deno.readTextFile(
-      workingDirectory + "deno.json",
+      join(workingDirectory, "deno.json"),
     );
+
     return JSON.parse(denoJsonContent);
   } catch (_error) {
     console.log("deno.json not found, creating a new one...");
@@ -33,7 +34,7 @@ export async function writeDenoConfig({
 }) {
   try {
     await Deno.writeTextFile(
-      workingDirectory + "deno.json",
+      join(workingDirectory, "deno.json"),
       JSON.stringify(updatedDenoJson, null, 2),
     );
   } catch (error) {

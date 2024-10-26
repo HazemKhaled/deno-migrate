@@ -7,6 +7,7 @@ import {
   writeDenoConfig,
 } from "./utils.ts";
 import type { DenoConfigType } from "./types.ts";
+import { migratePrettierScripts } from "./prettier.ts";
 
 const cli = new Command()
   .name("deno-migrator")
@@ -18,6 +19,8 @@ const cli = new Command()
     { default: Deno.cwd() },
   )
   .action(async ({ workingDirectory }) => {
+    workingDirectory = await Deno.realPath(workingDirectory);
+
     console.log("🚧 Welcome to Deno Migrator CLI 🚧", workingDirectory);
 
     const availableOptions = await getAvailableOptions(workingDirectory);
@@ -50,8 +53,10 @@ const cli = new Command()
           });
           break;
         case "prettier":
-          console.warn("🚧 Prettier migration not implemented yet.");
-          // TODO: Implement Prettier migration logic here
+          updatedDenoJson = await migratePrettierScripts({
+            workingDirectory,
+            existingDenoConfig,
+          });
           break;
         case "typescript":
           console.warn("🚧 tsconfig migration not implemented yet.");
