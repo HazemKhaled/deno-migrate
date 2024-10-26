@@ -1,4 +1,4 @@
-import { join } from "https://deno.land/std@0.211.0/path/mod.ts";
+import { join } from "jsr:@std/path";
 import type { DenoConfigType, GlobalConfigType } from "./types.ts";
 
 // TODO:: need to add all supported types conversion 🚨

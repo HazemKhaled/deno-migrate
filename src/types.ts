@@ -1,4 +1,5 @@
-import type { IntegerType } from "https://deno.land/x/cliffy@v0.25.7/command/mod.ts";
+import { IntegerType } from "jsr:@cliffy/command@1.0.0-rc.7";
+
 import denoConfig from "../deno.json" with { type: "json" };
 
 export type DenoConfigType = typeof denoConfig;
