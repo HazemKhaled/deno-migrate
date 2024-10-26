@@ -3,4 +3,4 @@ import denoConfig from "../deno.json" with { type: "json" };
 
 export type DenoConfigType = typeof denoConfig;
 
-export type GlobalConfigType = Record<string, string|boolean|IntegerType>;
+export type GlobalConfigType = Record<string, string | boolean | IntegerType>;

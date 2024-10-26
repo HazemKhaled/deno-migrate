@@ -43,10 +43,10 @@ const cli = new Command()
       });
     }
     if (options.includes("prettier")) {
-        updatedDenoJson = await migratePrettierScripts({
-            workingDirectory,
-            existingDenoConfig
-        })
+      updatedDenoJson = await migratePrettierScripts({
+        workingDirectory,
+        existingDenoConfig,
+      });
     }
     if (options.includes("tsconfig")) {
       console.log("🚧 tsconfig migration not implemented yet.");
