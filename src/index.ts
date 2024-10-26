@@ -9,6 +9,7 @@ import {
 import type { DenoConfigType } from "./types.ts";
 import { migratePrettierScripts } from "./prettier.ts";
 import { join } from "jsr:@std/path";
+import { migrateTsConfigScripts } from "./tsconfig.ts";
 
 const cli = new Command()
   .name("deno-migrator")
@@ -61,8 +62,10 @@ const cli = new Command()
           });
           break;
         case "typescript":
-          console.warn("🚧 tsconfig migration not implemented yet.");
-          // TODO: Implement tsconfig migration logic here
+          updatedDenoJson = await migrateTsConfigScripts({
+            file: filePath,
+            existingDenoConfig: updatedDenoJson,
+          });
           break;
         case "eslint":
           console.warn("🚧 ESLint migration not implemented yet.");
