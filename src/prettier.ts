@@ -2,7 +2,6 @@ import { basename } from "jsr:@std/path";
 import type { DenoConfigType, GlobalConfigType } from "./types.ts";
 import { deepMerge } from "@std/collections";
 
-
 const configMap: Record<string, string> = {
   useTabs: "useTabs",
   printWidth: "lineWidth",
