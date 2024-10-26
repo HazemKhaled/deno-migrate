@@ -16,14 +16,14 @@ export async function migrateTsConfigScripts({
     const exclude = configFile["exclude"] ?? [];
 
     return deepMerge({
-        compilerOptions,
-        fmt: {
-          options: {
-            include,
-            exclude,
-          },
+      compilerOptions,
+      fmt: {
+        options: {
+          include,
+          exclude,
         },
-      }, existingDenoConfig);
+      },
+    }, existingDenoConfig);
   } catch (error) {
     if (error instanceof Error) {
       console.error("❌ Error migrating scripts:", error.message);
