@@ -3,6 +3,7 @@ import { Checkbox } from "jsr:@cliffy/prompt@1.0.0-rc.7";
 import { migrateNpmScripts } from "./npm.ts";
 import { readDenoConfig, writeDenoConfig } from "./utils.ts";
 import type { DenoConfigType } from "./types.ts";
+import { migratePrettierScripts } from "./prettier.ts";
 
 const cli = new Command()
   .name("deno-migrator")
@@ -16,6 +17,8 @@ const cli = new Command()
     },
   )
   .action(async ({ workingDirectory }) => {
+    workingDirectory = await Deno.realPath(workingDirectory);
+
     console.log("🚧 Welcome to Deno Migrator CLI 🚧", workingDirectory);
     const options = await Checkbox.prompt({
       message: "Select the migrations you want to perform:",
@@ -40,8 +43,10 @@ const cli = new Command()
       });
     }
     if (options.includes("prettier")) {
-      console.log("🚧 Prettier migration not implemented yet.");
-      // TODO: Implement Prettier migration logic here
+        updatedDenoJson = await migratePrettierScripts({
+            workingDirectory,
+            existingDenoConfig
+        })
     }
     if (options.includes("tsconfig")) {
       console.log("🚧 tsconfig migration not implemented yet.");
