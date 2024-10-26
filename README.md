@@ -14,10 +14,10 @@ need for external ones such as **npm**, **Prettier**, and **ESLint**.
 - **Interactive Migration Options:** Select the parts of your project you want
   to migrate using a checklist.
 - **Current Status:**
-  - [ ] Automatically detect configurations to migrate
+  - [x] Automatically detect configurations to migrate
   - [x] **Migrate package.json scripts to deno.json tasks**
   - [ ] **Migrate package.json dependencies to JSR imports** (Coming Soon)
-  - [ ] **Migrate Prettier configuration to deno.json** (Coming Soon)
+  - [x] **Migrate Prettier configuration to deno.json** (Coming Soon)
   - [ ] **Migrate ESLint configuration to Deno lint rules** (Coming Soon)
   - [ ] **Migrate tsconfig.json to deno.json** (Coming Soon)
 
