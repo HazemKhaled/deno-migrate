@@ -1,5 +1,5 @@
 import type { DenoConfigType } from "./types.ts";
-import { deepMerge } from "@std/collections";
+import { deepMerge } from "jsr:@std/collections";
 
 export async function migrateTsConfigScripts({
   file,
