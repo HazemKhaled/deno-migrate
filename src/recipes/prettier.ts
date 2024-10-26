@@ -1,7 +1,7 @@
 import { basename } from "jsr:@std/path@1.0.7";
 import { deepMerge } from "jsr:@std/collections@1.0.9";
 
-import type { DenoConfigType, GlobalConfigType } from "./types.ts";
+import type { DenoConfigType, GlobalConfigType } from "../types.ts";
 
 const configMap: Record<string, string> = {
   useTabs: "useTabs",
@@ -24,7 +24,7 @@ const mapRules = (options: GlobalConfigType): GlobalConfigType => {
   return resOptions;
 };
 
-export async function migratePrettierScripts({
+export async function migrate({
   file,
   existingDenoConfig,
 }: {
