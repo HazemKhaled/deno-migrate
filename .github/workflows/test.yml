@@ -37,4 +37,12 @@ jobs:
         run: deno lint
 
       - name: Run tests
-        run: deno test -A
+        run: deno test --coverage=coverage
+
+      - name: Run tests
+        run: deno coverage --lcov --output=coverage/report.lcov
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
