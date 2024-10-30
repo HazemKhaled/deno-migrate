@@ -14,14 +14,49 @@ need for external ones such as **npm**, **Prettier**, and **ESLint**.
 - **Interactive Migration Options:** Select the parts of your project you want
   to migrate using a checklist.
 - **Current Status:**
-  - [x] Automatically detect configurations to migrate
-  - [x] **Migrate package.json scripts to deno.json tasks**
-  - [x] **Migrate tsconfig.json to deno.json**
-  - [x] **Migrate Prettier configuration to deno.json**
-  - [ ] **Migrate package.json dependencies to JSR imports** (Coming Soon)
-  - [ ] **Migrate ESLint configuration to Deno lint rules** (Coming Soon)
-  - [ ] **List any unsupported configs left in package.json** (Coming Soon)
-  - [ ] **Cleanup config files if 100% migrated**
+
+### `deno.json`
+
+|    |                                          |
+| -- | ---------------------------------------- |
+| ✅ | Detect configuration files automatically |
+| ❌ | List unsupported configurations          |
+| ❌ | Post Migration                           |
+
+### `package.json`
+
+|    |                                                  |
+| -- | ------------------------------------------------ |
+| ✅ | Migrate scripts to Deno tasks                    |
+| ❌ | Migrate NPM packages to JSR                      |
+| ❌ | List unsupported properties left in package.json |
+| ❌ | Cleanup package.json post migration              |
+
+### Typescript
+
+|    |                                    |
+| -- | ---------------------------------- |
+| ✅ | Migrate tsconfig.json to deno.json |
+
+### Prettier
+
+|    |                                                     |
+| -- | --------------------------------------------------- |
+| ✅ | Migrate Prettier configuration to Deno FMT          |
+| ✅ | Migrate .prettierignore                             |
+| ✅ | Support all .prettier files                         |
+| ✅ | List unsupported properties left in .prettierrc     |
+| ❌ | Remove Prettier configuration file and dependencies |
+
+### ESLint
+
+|    | Feature                                           |
+| -- | ------------------------------------------------- |
+| ❌ | Migrate ESLint configuration to Deno lint rules   |
+| ❌ | List unsupported properties left in .eslintrc     |
+| ❌ | Remove ESLint configuration file and dependencies |
+| ❌ | Support ESLint 9                                  |
+| ❌ | Map ESLint rules to Deno lint rules               |
 
 ---
 

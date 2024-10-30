@@ -6,11 +6,9 @@ import {
   getAvailableOptions,
   readDenoConfig,
   writeDenoConfig,
-} from "./utils.ts";
+} from "./utils/utils.ts";
 
-import { migrateNpmScripts } from "./npm.ts";
-import { migratePrettierScripts } from "./prettier.ts";
-import { migrateTsConfigScripts } from "./tsconfig.ts";
+import * as recipes from "#recipes/index.ts";
 
 import type { DenoConfigType } from "./types.ts";
 
@@ -25,11 +23,9 @@ const cli = new Command()
   )
   .action(async ({ workingDirectory }) => {
     workingDirectory = await Deno.realPath(workingDirectory);
-
     console.log("🚧 Welcome to Deno Migrator CLI 🚧", workingDirectory);
 
     const availableOptions = await getAvailableOptions(workingDirectory);
-
     if (availableOptions.length === 0) {
       console.log(
         "No configuration files found for migration. " + workingDirectory,
@@ -42,45 +38,36 @@ const cli = new Command()
       options: availableOptions,
     });
 
-    // Get the deno.json file and update it with the new scripts
-    const existingDenoConfig = await readDenoConfig({ workingDirectory });
-    let updatedDenoJson: DenoConfigType = { ...existingDenoConfig };
+    await performMigrations(selectedOptions, workingDirectory);
+  });
 
-    for (const option of selectedOptions) {
-      const [tool, file] = option.split("_");
-      const filePath = join(workingDirectory, file);
+async function performMigrations(
+  selectedOptions: string[],
+  workingDirectory: string,
+) {
+  const existingDenoConfig = await readDenoConfig({ workingDirectory });
+  let updatedDenoJson: DenoConfigType = { ...existingDenoConfig };
 
-      switch (tool) {
-        case "npm":
-          console.log(`Migrating npm scripts from ${file}...`);
-          updatedDenoJson = await migrateNpmScripts({
-            file: filePath,
-            existingDenoConfig: updatedDenoJson,
-          });
-          break;
-        case "prettier":
-          updatedDenoJson = await migratePrettierScripts({
-            file: filePath,
-            existingDenoConfig: updatedDenoJson,
-          });
-          break;
-        case "typescript":
-          updatedDenoJson = await migrateTsConfigScripts({
-            file: filePath,
-            existingDenoConfig: updatedDenoJson,
-          });
-          break;
-        case "eslint":
-          console.warn("🚧 ESLint migration not implemented yet.");
-          // TODO: Implement ESLint migration logic here
-          break;
-        default:
-          console.error(`Unknown option: ${option}`);
-      }
+  for (const option of selectedOptions) {
+    const [tool, file] = option.split("_") as [keyof typeof recipes, string];
+    const filePath = join(workingDirectory, file);
+
+    if (!Object.keys(recipes).includes(tool)) {
+      console.error(
+        `❌ Migration for ${tool} is not supported yet, PRs are welcome.`,
+      );
+      continue;
     }
 
-    writeDenoConfig({ workingDirectory, updatedDenoJson });
-    console.log("✅ Scripts migration completed and saved to deno.json");
-  });
+    console.log(`✅ Migrating ${tool} from ${file}...`);
+    updatedDenoJson = await recipes[tool].migrate({
+      file: filePath,
+      existingDenoConfig: updatedDenoJson,
+    });
+  }
+
+  writeDenoConfig({ workingDirectory, updatedDenoJson });
+  console.log("✅ Scripts migration completed and saved to deno.json");
+}
 
 await cli.parse(Deno.args);
