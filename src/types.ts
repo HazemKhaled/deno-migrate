@@ -5,6 +5,10 @@ export type FmtOptionsType = {
   semiColons?: boolean;
   singleQuote?: boolean;
   proseWrap?: "always" | "never" | "preserve";
+};
+
+export type DenoConfigFmtType = {
+  options?: FmtOptionsType;
   include?: string[];
   exclude?: string[];
 };
@@ -15,9 +19,8 @@ export type DenoConfigType = {
   exports?: string;
   tasks?: Record<string, string>;
   imports?: Record<string, string>;
-  fmt?: {
-    options: FmtOptionsType;
-  };
+  fmt?: DenoConfigFmtType;
+  compilerOptions?: Record<string, string>;
 };
 
 export type PrettierType = {

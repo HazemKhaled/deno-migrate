@@ -44,9 +44,7 @@ Deno.test("handleTextFile processes .prettierignore content", () => {
 
   const expected: DenoConfigType = {
     fmt: {
-      options: {
-        exclude: ["node_modules", "build"],
-      },
+      exclude: ["node_modules", "build"],
     },
   };
 

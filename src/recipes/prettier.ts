@@ -55,8 +55,8 @@ export const handleTextFile = (
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {
   const paths = fileData.split("\n").filter(Boolean);
-  return deepMerge(
-    { fmt: { options: { exclude: paths } } },
+  return deepMerge<DenoConfigType>(
+    { fmt: { exclude: paths } },
     existingDenoConfig,
   );
 };
@@ -66,7 +66,7 @@ export const handleJsonFile = (
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {
   const configFile: PrettierType = JSON.parse(fileData) ?? {};
-  return deepMerge(
+  return deepMerge<DenoConfigType>(
     { fmt: { options: { ...mapRules(configFile) } } },
     existingDenoConfig,
   );

@@ -13,13 +13,11 @@ export async function migrate({
     const configFile = JSON.parse(await Deno.readTextFile(file));
     const { compilerOptions = {}, include = [], exclude = [] } = configFile;
 
-    const newConfig = {
+    const newConfig: DenoConfigType = {
       compilerOptions,
       fmt: {
-        options: {
-          include,
-          exclude,
-        },
+        include,
+        exclude,
       },
     };
 
