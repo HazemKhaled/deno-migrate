@@ -40,9 +40,10 @@ jobs:
         run: deno test --coverage=coverage
 
       - name: Run tests
-        run: deno coverage --lcov --output=coverage/report.lcov
+        run: deno coverage --lcov --output=coverage/lcov.info
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v3
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v3
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
