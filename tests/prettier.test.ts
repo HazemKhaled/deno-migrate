@@ -1,5 +1,8 @@
 import { assert, assertEquals } from "jsr:@std/assert";
+
 import { handleJsonFile } from "#recipes/prettier.ts";
+
+import type { FmtOptionsType } from "../src/types.ts";
 
 Deno.test("handleJsonFile processes JSON correctly", () => {
   const prettierJsonMock = JSON.stringify({
@@ -12,11 +15,7 @@ Deno.test("handleJsonFile processes JSON correctly", () => {
   const result = handleJsonFile(prettierJsonMock, {});
 
   assert(result.fmt);
-  assertEquals(result.fmt.options.useTabs, true);
-  assertEquals(result.fmt.options.lineWidth, 80);
-  assertEquals(result.fmt.options.indentWidth, 4);
-  assertEquals(result.fmt.options.semiColons, false);
-  assertEquals(result.fmt.options.singleQuote, true);
+  assertPrettierOptions(result.fmt.options);
 });
 
 Deno.test("handleJsonFile handles invalid JSON", () => {
@@ -34,9 +33,13 @@ Deno.test("handleJsonFile handles invalid JSON", () => {
 //   const result = handleTextFile(prettierTextMock, {});
 
 //   assert(result.fmt);
-//   assertEquals(result.fmt.options.useTabs, true);
-//   assertEquals(result.fmt.options.lineWidth, 80);
-//   assertEquals(result.fmt.options.indentWidth, 4);
-//   assertEquals(result.fmt.options.semiColons, false);
-//   assertEquals(result.fmt.options.singleQuote, true);
+//   assertPrettierOptions(result.fmt.options);
 // });
+
+function assertPrettierOptions(options: FmtOptionsType) {
+  assertEquals(options.useTabs, true);
+  assertEquals(options.lineWidth, 80);
+  assertEquals(options.indentWidth, 4);
+  assertEquals(options.semiColons, false);
+  assertEquals(options.singleQuote, true);
+}

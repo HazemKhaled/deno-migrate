@@ -11,12 +11,9 @@ export async function migrate({
 }) {
   try {
     const configFile = JSON.parse(await Deno.readTextFile(file));
+    const { compilerOptions = {}, include = [], exclude = [] } = configFile;
 
-    const compilerOptions = configFile["compilerOptions"] ?? {};
-    const include = configFile["include"] ?? [];
-    const exclude = configFile["exclude"] ?? [];
-
-    return deepMerge({
+    const newConfig = {
       compilerOptions,
       fmt: {
         options: {
@@ -24,14 +21,14 @@ export async function migrate({
           exclude,
         },
       },
-    }, existingDenoConfig);
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error("❌ Error migrating scripts:", error.message);
-    } else {
-      console.error("❌ Error migrating scripts:", error);
-    }
+    };
 
+    return deepMerge(newConfig, existingDenoConfig);
+  } catch (error) {
+    console.error(
+      "❌ Error migrating scripts:",
+      error instanceof Error ? error.message : error,
+    );
     return existingDenoConfig;
   }
 }

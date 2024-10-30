@@ -13,15 +13,12 @@ const configMap: Record<string, string> = {
 };
 
 const mapRules = (options: GlobalConfigType): GlobalConfigType => {
-  const resOptions: GlobalConfigType = {};
-
-  for (const item in options) {
-    if (Object.hasOwn(configMap, item)) {
-      resOptions[configMap[item]] = options[item];
+  return Object.keys(options).reduce((resOptions, key) => {
+    if (configMap[key]) {
+      resOptions[configMap[key]] = options[key];
     }
-  }
-
-  return resOptions;
+    return resOptions;
+  }, {} as GlobalConfigType);
 };
 
 export async function migrate({
@@ -33,36 +30,28 @@ export async function migrate({
 }) {
   try {
     const fileData = await Deno.readTextFile(file);
-
-    if (basename(file) === ".prettierignore") {
-      return handleTextFile(fileData, existingDenoConfig);
-    }
-
-    return handleJsonFile(fileData, existingDenoConfig);
+    const handler = basename(file) === ".prettierignore"
+      ? handleTextFile
+      : handleJsonFile;
+    return handler(fileData, existingDenoConfig);
   } catch (error) {
-    if (error instanceof Error) {
-      console.error("❌ Error migrating scripts:", error.message);
-    } else {
-      console.error("❌ Error migrating scripts:", error);
-    }
-
+    console.error(
+      "❌ Error migrating scripts:",
+      error instanceof Error ? error.message : error,
+    );
     return existingDenoConfig;
   }
 }
 
-export const handleTextFile = (
+const handleTextFile = (
   fileData: string,
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {
-  const paths = fileData.split("\n").filter((el) => el.length);
-
-  return deepMerge({
-    fmt: {
-      options: {
-        exclude: paths,
-      },
-    },
-  }, existingDenoConfig);
+  const paths = fileData.split("\n").filter(Boolean);
+  return deepMerge(
+    { fmt: { options: { exclude: paths } } },
+    existingDenoConfig,
+  );
 };
 
 export const handleJsonFile = (
@@ -70,12 +59,8 @@ export const handleJsonFile = (
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {
   const configFile = JSON.parse(fileData);
-
-  return deepMerge({
-    fmt: {
-      options: {
-        ...mapRules(configFile || {}),
-      },
-    },
-  }, existingDenoConfig);
+  return deepMerge(
+    { fmt: { options: { ...mapRules(configFile || {}) } } },
+    existingDenoConfig,
+  );
 };

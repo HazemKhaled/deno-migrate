@@ -7,23 +7,35 @@ export async function migrate({
   file: string;
   existingDenoConfig: DenoConfigType;
 }) {
-  try {
-    const pkgJson = JSON.parse(await Deno.readTextFile(file));
+  const pkgJson = await readPackageJson(file);
 
-    return {
-      ...existingDenoConfig,
-      tasks: {
-        ...(existingDenoConfig.tasks || {}),
-        ...(pkgJson.scripts || {}),
-      },
-    } as DenoConfigType;
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error("❌ Error migrating scripts:", error.message);
-    } else {
-      console.error("❌ Error migrating scripts:", error);
-    }
-
+  if (!pkgJson) {
     return existingDenoConfig;
+  }
+
+  return {
+    ...existingDenoConfig,
+    tasks: {
+      ...(existingDenoConfig.tasks || {}),
+      ...(pkgJson.scripts || {}),
+    },
+  } as DenoConfigType;
+}
+
+async function readPackageJson(file: string) {
+  try {
+    const content = await Deno.readTextFile(file);
+    return JSON.parse(content);
+  } catch (error) {
+    handleError(error);
+    return null;
+  }
+}
+
+function handleError(error: unknown) {
+  if (error instanceof Error) {
+    console.error("❌ Error migrating scripts:", error.message);
+  } else {
+    console.error("❌ Error migrating scripts:", error);
   }
 }

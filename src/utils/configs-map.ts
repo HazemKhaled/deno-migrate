@@ -1,20 +1,9 @@
 export const CONFIG_GROUPS = {
   npm: ["package.json"],
-
-  eslint: [
-    ".eslintrc",
-    ".eslintrc.json",
-    ".eslintrc.yaml",
-    ".eslintrc.yml",
-    ".eslintrc.js",
-  ],
-
+  eslint: [".eslintrc", ".eslintrc.{json,yaml,yml,js}"],
   prettier: [
     ".prettierrc",
-    ".prettierrc.json",
-    ".prettierrc.yaml",
-    ".prettierrc.yml",
-    ".prettierrc.js",
+    ".prettierrc.{json,yaml,yml,js}",
     ".prettierignore",
   ],
   typescript: ["tsconfig.json"],
