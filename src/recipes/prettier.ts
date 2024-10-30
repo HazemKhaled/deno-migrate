@@ -1,9 +1,9 @@
 import { basename } from "jsr:@std/path@1.0.7";
 import { deepMerge } from "jsr:@std/collections@1.0.9";
 
-import type { DenoConfigType, GlobalConfigType } from "../types.ts";
+import type { DenoConfigType, FmtOptionsType, PrettierType } from "../types.ts";
 
-const configMap: Record<string, string> = {
+const prettierToDenoFmtMap: Record<keyof PrettierType, keyof FmtOptionsType> = {
   useTabs: "useTabs",
   printWidth: "lineWidth",
   tabWidth: "indentWidth",
@@ -12,13 +12,16 @@ const configMap: Record<string, string> = {
   proseWrap: "proseWrap",
 };
 
-const mapRules = (options: GlobalConfigType): GlobalConfigType => {
-  return Object.keys(options).reduce((resOptions, key) => {
-    if (configMap[key]) {
-      resOptions[configMap[key]] = options[key];
+const mapRules = (options: PrettierType): Partial<FmtOptionsType> => {
+  return Object.entries(options).reduce((resOptions, [key, value]) => {
+    const denoKey = prettierToDenoFmtMap[key as keyof PrettierType];
+    if (denoKey) {
+      resOptions[denoKey] = value as boolean & number;
+    } else {
+      console.warn(`❌ Prettier ${key} is not a supported Deno FMT`);
     }
     return resOptions;
-  }, {} as GlobalConfigType);
+  }, {} as Partial<FmtOptionsType>);
 };
 
 export async function migrate({
@@ -58,9 +61,9 @@ export const handleJsonFile = (
   fileData: string,
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {
-  const configFile = JSON.parse(fileData);
+  const configFile: PrettierType = JSON.parse(fileData) ?? {};
   return deepMerge(
-    { fmt: { options: { ...mapRules(configFile || {}) } } },
+    { fmt: { options: { ...mapRules(configFile) } } },
     existingDenoConfig,
   );
 };

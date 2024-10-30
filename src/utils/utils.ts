@@ -1,8 +1,9 @@
 import { walk } from "jsr:@std/fs@1.0.5";
 import { join } from "jsr:@std/path@1.0.7";
 
-import type { DenoConfigType } from "../types.ts";
 import { CONFIG_GROUPS } from "./configs-map.ts";
+
+import type { ConfigGroupsType, DenoConfigType } from "../types.ts";
 
 export async function readDenoConfig({
   workingDirectory,
@@ -47,8 +48,7 @@ export async function writeDenoConfig({
 }
 
 export async function getConfigFiles(workingDirectory: string = Deno.cwd()) {
-  const configFiles: Record<string, Record<string, string>> =
-    initializeConfigFiles();
+  const configFiles: ConfigGroupsType = initializeConfigFiles();
 
   for await (const entry of walk(workingDirectory, { maxDepth: 1 })) {
     matchConfigFiles(
@@ -62,7 +62,7 @@ export async function getConfigFiles(workingDirectory: string = Deno.cwd()) {
 }
 
 function initializeConfigFiles() {
-  const configFiles: Record<string, Record<string, string>> = {};
+  const configFiles: ConfigGroupsType = {};
 
   // Initialize each tool group with an empty object
   for (const tool of Object.keys(CONFIG_GROUPS)) {
@@ -74,7 +74,7 @@ function initializeConfigFiles() {
 function matchConfigFiles(
   filename: string,
   filepath: string,
-  configFiles: Record<string, Record<string, string>>,
+  configFiles: ConfigGroupsType,
 ) {
   for (const [tool, patterns] of Object.entries(CONFIG_GROUPS)) {
     for (const pattern of patterns) {
@@ -95,7 +95,7 @@ export async function getAvailableOptions(
 }
 
 function generateAvailableOptions(
-  configFiles: Record<string, Record<string, string>>,
+  configFiles: ConfigGroupsType,
 ) {
   const availableOptions = [];
 
@@ -107,6 +107,6 @@ function generateAvailableOptions(
       });
     }
   }
-  console.log({ availableOptions });
+
   return availableOptions;
 }

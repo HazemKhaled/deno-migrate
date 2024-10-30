@@ -1,31 +1,32 @@
-import type { IntegerType } from "jsr:@cliffy/command@1.0.0-rc.7";
-
-export type TaskType = Record<string, string>;
-
-export type ImportType = Record<string, string>;
-
 export type FmtOptionsType = {
-  useTabs: boolean;
-  lineWidth: number;
-  indentWidth: number;
-  semiColons: boolean;
-  singleQuote: boolean;
-  proseWrap: "preserve" | "always" | "never";
+  useTabs?: boolean;
+  lineWidth?: number;
+  indentWidth?: number;
+  semiColons?: boolean;
+  singleQuote?: boolean;
+  proseWrap?: "always" | "never" | "preserve";
   include?: string[];
   exclude?: string[];
-};
-
-export type FmtType = {
-  options: FmtOptionsType;
 };
 
 export type DenoConfigType = {
   name?: string;
   version?: string;
   exports?: string;
-  tasks?: TaskType;
-  imports?: ImportType;
-  fmt?: FmtType;
+  tasks?: Record<string, string>;
+  imports?: Record<string, string>;
+  fmt?: {
+    options: FmtOptionsType;
+  };
 };
 
-export type GlobalConfigType = Record<string, string | boolean | IntegerType>;
+export type PrettierType = {
+  useTabs?: boolean;
+  printWidth?: number;
+  tabWidth?: number;
+  semi?: boolean;
+  singleQuote?: boolean;
+  proseWrap?: "always" | "never" | "preserve";
+};
+
+export type ConfigGroupsType = Record<string, Record<string, string>>;
