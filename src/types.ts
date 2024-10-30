@@ -27,6 +27,17 @@ export type PrettierType = {
   semi?: boolean;
   singleQuote?: boolean;
   proseWrap?: "always" | "never" | "preserve";
+
+  // Unsupported options by deno fmt
+  arrowParens: "avoid" | "always";
+  bracketSpacing: boolean;
+  htmlWhitespaceSensitivity: "css" | "strict" | "ignore";
+  insertPragma: boolean;
+  jsxBracketSameLine: boolean;
+  jsxSingleQuote: boolean;
+  quoteProps: "as-needed" | "consistent" | "preserve";
+  requirePragma: boolean;
+  trailingComma: "none" | "es5" | "all";
 };
 
 export type ConfigGroupsType = Record<string, Record<string, string>>;

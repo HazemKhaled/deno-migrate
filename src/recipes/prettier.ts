@@ -3,7 +3,9 @@ import { deepMerge } from "jsr:@std/collections@1.0.9";
 
 import type { DenoConfigType, FmtOptionsType, PrettierType } from "../types.ts";
 
-const prettierToDenoFmtMap: Record<keyof PrettierType, keyof FmtOptionsType> = {
+const prettierToDenoFmtMap: Partial<
+  Record<keyof PrettierType, keyof FmtOptionsType>
+> = {
   useTabs: "useTabs",
   printWidth: "lineWidth",
   tabWidth: "indentWidth",
@@ -12,7 +14,9 @@ const prettierToDenoFmtMap: Record<keyof PrettierType, keyof FmtOptionsType> = {
   proseWrap: "proseWrap",
 };
 
-const mapRules = (options: PrettierType): Partial<FmtOptionsType> => {
+export const mapRules = (
+  options: Partial<PrettierType>,
+): Partial<FmtOptionsType> => {
   return Object.entries(options).reduce((resOptions, [key, value]) => {
     const denoKey = prettierToDenoFmtMap[key as keyof PrettierType];
     if (denoKey) {
@@ -46,7 +50,7 @@ export async function migrate({
   }
 }
 
-const handleTextFile = (
+export const handleTextFile = (
   fileData: string,
   existingDenoConfig: DenoConfigType,
 ): DenoConfigType => {

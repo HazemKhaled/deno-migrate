@@ -1,25 +1,80 @@
-import { assert, assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "jsr:@std/assert";
 
-import { handleJsonFile } from "#recipes/prettier.ts";
+import {
+  handleJsonFile,
+  handleTextFile,
+  mapRules,
+  migrate,
+} from "#recipes/prettier.ts";
 
-import type { FmtOptionsType } from "../src/types.ts";
+import type {
+  DenoConfigType,
+  FmtOptionsType,
+  PrettierType,
+} from "../src/types.ts";
 
-Deno.test("handleJsonFile processes JSON correctly", () => {
-  const prettierJsonMock = JSON.stringify({
-    useTabs: true,
-    printWidth: 80,
-    tabWidth: 4,
-    semi: false,
-    singleQuote: true,
-  });
-  const result = handleJsonFile(prettierJsonMock, {});
+const prettierOptionsMock: Partial<PrettierType> = {
+  useTabs: true,
+  printWidth: 80,
+  tabWidth: 4,
+  semi: false,
+  singleQuote: true,
+  proseWrap: "preserve",
+};
+const denoFmtOptionsMock: Partial<FmtOptionsType> = {
+  useTabs: true,
+  lineWidth: 80,
+  indentWidth: 4,
+  semiColons: false,
+  singleQuote: true,
+  proseWrap: "preserve",
+};
 
-  assert(result.fmt);
-  assertPrettierOptions(result.fmt.options);
+// Test for mapRules function with updated types
+Deno.test("mapRules converts Prettier options to Deno fmt options", () => {
+  const result = mapRules(prettierOptionsMock);
+
+  assertEquals(result, denoFmtOptionsMock);
+});
+
+// Test for handleTextFile function with updated types
+Deno.test("handleTextFile processes .prettierignore content", () => {
+  const fileData = "node_modules\nbuild\n";
+  const existingDenoConfig: DenoConfigType = {};
+
+  const expected: DenoConfigType = {
+    fmt: {
+      options: {
+        exclude: ["node_modules", "build"],
+      },
+    },
+  };
+
+  const result = handleTextFile(fileData, existingDenoConfig);
+
+  assertEquals(result, expected);
+});
+
+// Test for handleJsonFile function with updated types
+Deno.test("handleJsonFile processes Prettier config JSON", () => {
+  const fileData = JSON.stringify(prettierOptionsMock as PrettierType);
+  const existingDenoConfig: DenoConfigType = {};
+
+  const expected: DenoConfigType = {
+    fmt: {
+      options: {
+        ...denoFmtOptionsMock,
+      },
+    },
+  };
+
+  const result = handleJsonFile(fileData, existingDenoConfig);
+
+  assertEquals(result, expected);
 });
 
 Deno.test("handleJsonFile handles invalid JSON", () => {
-  const invalidJsonContent = '{"key": "value"';
+  const invalidJsonContent = "not a valid JSON string";
   try {
     handleJsonFile(invalidJsonContent, {});
   } catch (error) {
@@ -27,19 +82,31 @@ Deno.test("handleJsonFile handles invalid JSON", () => {
   }
 });
 
-// Deno.test("handleTextFile processes text correctly", () => {
-//   const prettierTextMock =
-//     `useTabs: true\nprintWidth: 80\ntabWidth: 4\nsemi: false\nsingleQuote: true`;
-//   const result = handleTextFile(prettierTextMock, {});
+// Test for migrate function handling Prettier config file
+Deno.test("migrate handles Prettier config file correctly", async () => {
+  const mockFile = "prettier.config.json";
 
-//   assert(result.fmt);
-//   assertPrettierOptions(result.fmt.options);
-// });
+  // Mock Deno.readTextFile
+  const readTextFile = Deno.readTextFile;
+  Deno.readTextFile = async () => await JSON.stringify(prettierOptionsMock);
 
-function assertPrettierOptions(options: FmtOptionsType) {
-  assertEquals(options.useTabs, true);
-  assertEquals(options.lineWidth, 80);
-  assertEquals(options.indentWidth, 4);
-  assertEquals(options.semiColons, false);
-  assertEquals(options.singleQuote, true);
-}
+  const existingDenoConfig: DenoConfigType = {};
+
+  const expected: DenoConfigType = {
+    fmt: {
+      options: {
+        ...denoFmtOptionsMock,
+      },
+    },
+  };
+
+  const result = await migrate({
+    file: mockFile,
+    existingDenoConfig,
+  });
+
+  assertEquals(result, expected);
+
+  // Restore Deno.readTextFile
+  Deno.readTextFile = readTextFile;
+});
