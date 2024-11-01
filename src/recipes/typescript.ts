@@ -1,6 +1,6 @@
 import { deepMerge } from "jsr:@std/collections@1.0.9";
 
-import type { DenoConfigType } from "../types.ts";
+import type { DenoConfigType } from "#/types.ts";
 
 export async function migrate({
   file,

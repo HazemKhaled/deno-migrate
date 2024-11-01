@@ -6,11 +6,11 @@ import {
   getAvailableOptions,
   readDenoConfig,
   writeDenoConfig,
-} from "./utils/utils.ts";
+} from "#/utils/utils.ts";
 
-import * as recipes from "#recipes/index.ts";
+import * as recipes from "#/recipes/index.ts";
 
-import type { DenoConfigType } from "./types.ts";
+import type { DenoConfigType } from "#/types.ts";
 
 const cli = new Command()
   .name("deno-migrator")

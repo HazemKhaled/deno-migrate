@@ -1,7 +1,7 @@
 import { basename } from "jsr:@std/path@1.0.7";
 import { deepMerge } from "jsr:@std/collections@1.0.9";
 
-import type { DenoConfigType, FmtOptionsType, PrettierType } from "../types.ts";
+import type { DenoConfigType, FmtOptionsType, PrettierType } from "#/types.ts";
 
 const prettierToDenoFmtMap: Partial<
   Record<keyof PrettierType, keyof FmtOptionsType>

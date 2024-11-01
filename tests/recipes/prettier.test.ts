@@ -5,13 +5,9 @@ import {
   handleTextFile,
   mapRules,
   migrate,
-} from "#recipes/prettier.ts";
+} from "#/recipes/prettier.ts";
 
-import type {
-  DenoConfigType,
-  FmtOptionsType,
-  PrettierType,
-} from "../src/types.ts";
+import type { DenoConfigType, FmtOptionsType, PrettierType } from "#/types.ts";
 
 const prettierOptionsMock: Partial<PrettierType> = {
   useTabs: true,
