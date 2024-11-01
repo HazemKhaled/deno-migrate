@@ -1,4 +1,4 @@
-import type { DenoConfigType } from "../types.ts";
+import type { DenoConfigType } from "#/types.ts";
 
 export async function migrate({
   file,
